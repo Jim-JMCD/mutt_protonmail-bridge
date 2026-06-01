@@ -2,8 +2,8 @@
 
 ## Guide for installing, configuring and using the Mutt mail client with Proton Mail Bridge on Linux Server and Linux Desktop.
 
-#### Full Guide : [Mutt_ProtonMail-Bridge_Guide](https://github.com/Jim-JMCD/mutt_protonmail-bridge/blob/main/Mutt_Proton_Mail-Bridge_Guide.pdf) _See Mutt_Proton_Mail_Bridge_Guide.pdf in repo file list_
-#
+#### Full Guide : [Mutt_Proton_Mail-Bridge_Guide](https://github.com/Jim-JMCD/mutt_protonmail-bridge/blob/main/Mutt_Proton_Mail-Bridge_Guide.pdf) (Mutt_Proton_Mail_Bridge_Guide.pdf in repo file list
+
 System, security and application administrators use command line mail tools like sendmail, postfix, mailx and mutt to mail out reports alerts and other material to people that presumably care. This guide describes how setup up command line mail service using Proton Mail Bridge combined with the Mutt mail client.
 
 On Linux Desktop, Thunderbird is supported by Proton and may be a better option for sending emails from the command line. 
@@ -34,3 +34,5 @@ At time of writing:
 1.	Create the mutt default configuration file in the user’s home directory.
 1.	Install mutt
 1.	Start protonmail-bridge in the background, alternatively start it another window using the designated
+
+#### A similar guide for using the Postfix mail client with Proton SMTP Server in Lunix Server is in development
