@@ -1,0 +1,29 @@
+# ================  IMAP ====================
+set imap_user = mothra.tokyo@pm.me            # Your protonmail account
+set imap_pass = lN9W2YBG2eXQFkeZQhHwWg        # Your password in protonmail-bridge
+set spoolfile = "imap://localhost:1143/INBOX"
+set folder = "imap://localhost:1143"
+set record="+Sent"
+set postponed="+Drafts"
+set header_csuache = "~/.mutt/cache/headers"
+set message_cachedir = "~/.mutt/cache/bodies"
+set certificate_file = "~/.mutt/certificates"
+# ================  SMTP  ====================
+set smtp_url="smtp://mothra.tokyo@pm.me@127.0.0.1:1025"
+set smtp_pass = lN9W2YBG2eXQFkeZQhHwWg 
+set ssl_force_tls = yes # Require encrypted connection
+# ===== Composition  ====================
+set editor = "vim"      # Text editor for composing/editing messages, your choice
+set edit_headers = yes  # Headers visible when editing
+set charset = UTF-8     # set $LANG
+set write_bcc = yes
+unset use_domain
+set realname = "Mothra "
+set from = mothra.tokyo@pm.me # must match email address in this muttrc file
+set use_from = yes
+set sort = threads
+set sort_aux = reverse-last-date-received
+set copy= no
+# for viewing html e-mails inside mutt, see ~/.mailcap settings
+auto_view text/html
+alternative_order text/enriched text/plain text text/html
