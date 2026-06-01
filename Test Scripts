@@ -1,0 +1,42 @@
+A simple one liner 
+df -h | mutt -s "Storage Usage on $(uname -n) at $(date)" -c tster1@lumpy.co -- tster0@lumpy.co
+---------------------------------------------------------------------------
+A script to test the different the different components of using a heredoc. 
+If indentations in the mail body have problems. The "<<" could be replaced with "<<-" 
+---------------------------------------------------------------------------
+#!/usr/bin/bash
+# Name: mutt-pmbridge-check
+# Attaches the latest logs for protonmail-bridge launcher and bridge
+# Lists storage used is the users home directory
+# Lists storage used by the Linux comoputrer
+# =============================================================
+log_dir=${HOME}/.local/share/protonmail/bridge-v3/logs
+bri_log=$(ls -1tr $log_dir | grep '_bri_' | tail -n1)
+lau_log=$(ls -1tr $log_dir | grep '_lau_' | tail -n1)
+# -------------------------------------------------------------
+function disk_usage(){
+# Note : only list directories
+  cd ~
+  du --apparent-size -sh ./.??*/ | sed 's/\.\///' |awk '{printf "%6s %s\n",$1,$2}'
+  du --apparent-size -sh ./*/ | sed 's/\.\///' |awk '{printf "%6s %s\n",$1,$2}'
+} # -----------------------------------------------------------
+msg_subject="$(uname -n) Proton Mail Bridge report"
+/usr/bin/mutt -s "$msg_subject" -a ${log_dir}/${lau_log} -a ${log_dir}/${bri_log}  -- tester0@lumpy.com  << msg_end
+
+$(date)
+
+Storage usage in home directory
+---------------------------------
+  Size Directory
+$(disk_usage)
+---------------------------------
+
+Total Storage Usage
+-------------------------------------------------------------
+$(df -h)
+-------------------------------------------------------------
+
+** Latest protonmail-bridge log files attached.
+
+msg_end
+# End --------------------------------------------------------
