@@ -1,0 +1,71 @@
+#####################################################################
+# Name: pmbridge-start
+# Start protonmail-bridge with nohup
+# If no logging is required replace $log with /dev/null in the nohup line
+#####################################################################
+#!/usr/bin/bash
+now=$(date +%y%m%d-%H%M-%S)
+log=${HOME}/pmbridge/pmbridge_start_${now}_log
+echo "STARTED: $(date)" > $log
+echo "============================================" >> $log
+nohup /usr/bin/protonmail-bridge -n >> $log 2>&1 &
+exit $?
+# -- End ------------------------------------------------------------
+#####################################################################
+# Name: pmbridge-stop
+# Kills protonmail-bridge using the process id stored in the lock file
+#####################################################################
+#!/usr/bin/bash
+proc_id=$(cat ${HOME}/.cache/protonmail/bridge-v3/bridge-v3.lock)
+pid_tmp=$(ps -o pid= $proc_id)
+RC=$?
+if [[ ${RC} = "0" ]]; then
+    kill $proc_id
+else
+    echo "protonmail-bridge not active"
+fi
+# -- End ------------------------------------------------------------
+#####################################################################
+# Name: pmbridge-check
+# Checks IMAP and SMTP ports, processes and storage capacity 
+#####################################################################
+#!/usr/bin/bash
+echo "---------------------------------------"
+(echo > /dev/tcp/127.0.0.1/1143) > /dev/null 2>&1
+RC=$?
+if [[ ${RC} == "0" ]]; then
+   echo "IMAP port 1143 - active"
+else
+   echo "IMAP port 1143 - not active"
+fi
+(echo > /dev/tcp/127.0.0.1/1025) > /dev/null 2>&1
+RC=$?
+if [[ ${RC} == "0" ]]; then
+   echo "SMTP port 1025 - active"
+else
+   echo "SMTP port 1025 - not active"
+fi
+echo -e "---------------------------------------\n"
+echo "Log files: .local/share/protonmail/bridge-v3/logs"
+
+parent_pid="$(cat ${HOME}/.cache/protonmail/bridge-v3/bridge-v3.lock)"
+parent_pgid=$(ps -o pgid= $parent_pid)
+RC=$?
+
+if [[ ${RC} = "1" ]]; then
+   echo -e "---------------------------------------\n"
+   echo -e "protonmail-bridge not running\n"
+   echo -e "NOTE: If protonmail-bridge has just started, check again soon.\n"
+   exit 1
+fi
+echo "---------------------------------------"
+ps -ej | grep "$parent_pgid" | awk 'BEGIN { printf "     PID    PGID\tCMD(Short)\n"}
+                      {printf " %7s %7s\t%s\n",$1,$2,$6}'
+echo "---------------------------------------"
+echo "Process ID to terminate protonmail-bridge: $parent_pid"
+echo "---------------------------------------"
+echo "Directories and files larger than 1 MiB in $HOME top-level"
+cd ~
+du --apparent-size -sh -t 1M .??*
+du --apparent-size -sh -t 1M  *
+# -- End ------------------------------------------------------------
